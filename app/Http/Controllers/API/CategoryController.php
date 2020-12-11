@@ -27,4 +27,10 @@ class CategoryController extends Controller
     {
         return response()->json($product);
     }
+
+    public function checkQuantity($id)
+    {
+        $quantity = Product::where('id', $id)->select('id', 'quantity')->first()->quantity;
+        return response()->json($quantity);
+    }
 }

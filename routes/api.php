@@ -26,6 +26,7 @@ Route::middleware('auth:api')->group(function() {
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category:slug}', [CategoryController::class, 'getProducts']);
 Route::get('/products/{product:slug}', [CategoryController::class, 'getproduct']);
+Route::post('/check-quantity/{productId}', [CategoryController::class, 'checkQuantity']);
 
 
 
