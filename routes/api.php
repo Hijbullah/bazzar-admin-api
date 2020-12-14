@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\CategoryController;
 
 /*
@@ -27,6 +29,13 @@ Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category:slug}', [CategoryController::class, 'getProducts']);
 Route::get('/products/{product:slug}', [CategoryController::class, 'getproduct']);
 Route::post('/check-quantity/{productId}', [CategoryController::class, 'checkQuantity']);
+
+// address 
+Route::get('/addresses/{user}', [AddressController::class, 'index']);
+Route::post('/addresses/{user}/create', [AddressController::class, 'create']);
+
+Route::get('/orders/{order}', [OrderController::class, 'getOrder']);
+Route::post('/make-payment', [OrderController::class, 'makePayment']);
 
 
 
