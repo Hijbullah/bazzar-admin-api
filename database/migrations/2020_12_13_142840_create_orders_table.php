@@ -22,16 +22,17 @@ class CreateOrdersTable extends Migration
                     ->constrained()
                     ->onDelete('set null');
 
-            $table->string('billing_email')->nullable();
-            $table->string('billing_name')->nullable();
-            $table->string('billing_phone')->nullable();
-            $table->string('billing_city')->nullable();
-            $table->string('billing_address')->nullable();
+            $table->string('delivery_name');
+            $table->string('delivery_email')->nullable();
+            $table->string('delivery_phone');
+            $table->string('delivery_city');
+            $table->string('delivery_address');
           
-            $table->float('billing_subtotal');
-            $table->float('billing_tax')->nullable();
+            $table->float('subtotal');
+            $table->float('tax')->nullable();
+            $table->float('delivery')->nullable();
             $table->unsignedInteger('total_quantity');
-            $table->float('billing_total'); 
+            $table->float('total'); 
 
             $table->string('payment_method')->default('cod');
             $table->boolean('payment_status')->default(false);

@@ -24,7 +24,7 @@ class AddressController extends Controller
             'address' => ['required', 'string'],
         ]);
         
-        $user->addresses()->save(new Address($data));
-        return response()->json(true);
+        $address = $user->addresses()->save(new Address($data));
+        return response()->json($address->only('id', 'name', 'phone', 'city', 'address'));
     }
 }
