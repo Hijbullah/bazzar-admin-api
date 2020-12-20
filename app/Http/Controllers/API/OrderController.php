@@ -10,23 +10,23 @@ use App\Http\Requests\Api\StoreOrderRequest;
 
 class OrderController extends Controller
 {
+    public function getOrderSummery($user) {
+        $orders = Order::where('user_id', $user)->latest()->get();
+        return $orders;
+    }
+
+    public function getOrderDetails($orderCode)
+    {
+        return Order::where('order_code', $orderCode)->with('products')->first();
+    }
    
     public function getOrder(Order $order)
     {
-        return $order;
+        return response()->json($order);
     }
 
     public function placeOrder(StoreOrderRequest $request)
     {
-        return $request->order['products'];
-
-        $products = collect($request->products)->map(function($product) {
-            return [
-                $product->id
-            ];
-        });
-
-        // return $request;
         $order = new Order;
         $order->order_code = Str::random(11);
         $order->user_id = $request->user;
@@ -42,20 +42,29 @@ class OrderController extends Controller
         $order->total = $request->order['total'];
         $order->save();
 
+        $this->storeOrderProduct($order, $request->order['products']);
 
-
-
-        $order->products()->attach([
-            1 => ['expires' => $expires],
-            2 => ['expires' => $expires],
-        ]);
-
-        return $order;
+        return response()->json($order->order_code);
     }
 
-    public function makePayment(Request $request)
+    public function storeOrderProduct($order, $products)
     {
-        return response()->json($request);
+        collect($products)->each(function($product) use ($order) {
+            $order->products()->attach($product['id'], ['quantity' => $product['quantity']]);
+        });
+    }
+
+    public function makePayment(Order $order, Request $request)
+    {
+        $request->validate([
+            'transactionId' => ['required']
+        ]);
+
+        $order->payment_method = $request->paymentMethod;
+        $order->payment_status = true;
+        $order->save();
+
+        return response()->json(['message' => 'Payment successfull']);
     }
 
     
