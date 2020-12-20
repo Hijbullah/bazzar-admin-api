@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Notifications\UserResetpassword;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -56,4 +57,16 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+        /**
+        * Send the password reset notification.
+        *
+        * @param  string  $token
+        * @return void
+        */
+
+        public function sendPasswordResetNotification($token)
+        {
+            $this->notify(new UserResetpassword($token));
+        }
 }

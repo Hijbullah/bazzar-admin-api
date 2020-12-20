@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -18,7 +20,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'forgetPassword', 'resetPassword']]);
     }
 
     /**
@@ -75,6 +77,64 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully create new user']);
     }
 
+    public function forgetPassword(Request $request)
+    {
+
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+
+        // We will send the password reset link to this user. Once we have attempted
+        // to send the link, we will examine the response then see the message we
+        // need to show to the user. Finally, we'll send out a proper response.
+        $status = $this->broker()->sendResetLink(
+            $request->only('email')
+        );
+
+        if($status == Password::RESET_LINK_SENT)
+        {
+            return response()->json(['message' => __($status)]);
+        }else {
+            throw ValidationException::withMessages([
+                'email' => __($status),
+            ]);
+        }
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|string|confirmed|min:8',
+        ]);
+        
+
+        $status = $this->broker()->reset(
+
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+
+            function ($user) use ($request) {
+                $user->forceFill([
+                    'password' => Hash::make($request->password),
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+
+            }
+        );
+
+        if($status == Password::PASSWORD_RESET)
+        {
+            return response()->json(['message' => __($status)]);
+        }else {
+            throw ValidationException::withMessages([
+                'email' => __($status),
+            ]);
+        }
+    }
+
     /**
      * Log the user out (Invalidate the token)
      *
@@ -121,5 +181,10 @@ class AuthController extends Controller
     public function guard()
     {
         return Auth::guard('api');
+    }
+
+    public function broker()
+    {
+        return Password::broker('users');
     }
 }
