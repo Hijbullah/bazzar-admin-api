@@ -61,6 +61,7 @@ class OrderController extends Controller
         ]);
 
         $order->payment_method = $request->paymentMethod;
+        $order->bkash_transaction_id = $request->transactionId; 
         $order->payment_status = true;
         $order->save();
 

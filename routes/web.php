@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 
@@ -33,6 +34,9 @@ Route::middleware('auth')->group(function() {
     Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
     Route::resource('/products', ProductController::class);
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order:order_code}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{order:order_code}/status/{status}', [OrderController::class, 'orderStatus'])->name('orders.status');
 });
 
 require __DIR__.'/auth.php';
