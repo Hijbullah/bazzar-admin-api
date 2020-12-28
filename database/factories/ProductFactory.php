@@ -23,7 +23,7 @@ class ProductFactory extends Factory
     public function definition()
     {
         $name = $this->faker->sentence();
-        $price = $this->faker->randomFloat(2, 200, 2000);
+        $price = $this->faker->numberBetween(100, 2000);
 
         return [
             'category_id' => $this->faker->numberBetween(7, 28),
