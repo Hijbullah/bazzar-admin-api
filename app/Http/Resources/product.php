@@ -20,14 +20,18 @@ class Product extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'quantity' => $this->quantity,
-            'orginal_price' => $this->sale_price,
-            'discount' => $this->discout,
-            'price' => $this->price_show,
+            'price' => [
+                'originalPrice' => $this->price,
+                'salePrice' => $this->price_after_discount,
+                'discount' => $this->discount,
+                'discountInPercentage' => round(($this->discount / $this->price) * 100)
+            ],
+           
             'short_description' => $this->short_description,
             'description' => $this->description,
             'images' => collect($this->images)->transform(function($image) {
                 return Storage::url($image);
-            })
+            }),
         ];
     }
 }

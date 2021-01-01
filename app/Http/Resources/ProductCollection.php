@@ -22,12 +22,13 @@ class ProductCollection extends ResourceCollection
                     'name' => $product->name,
                     'slug' => $product->slug,
                     'quantity' => $product->quantity,
-                    'orginal_price' => $product->sale_price,
-                    'discount' => $product->discout,
-                    'price' => $product->price_show,
-                    'images' => collect($product->images)->transform(function($image) {
-                        return Storage::url($image);
-                    })
+                    'price' => [
+                        'originalPrice' => $product->price,
+                        'salePrice' => $product->price_after_discount,
+                        'discount' => $product->discount,
+                        'discountInPercentage' => round(($product->discount / $product->price) * 100)
+                    ],
+                    'image' => Storage::url($product->images[mt_rand(0, count($product->images) - 1)])
                 ];
             }),
         ];
