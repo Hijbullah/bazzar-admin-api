@@ -39,9 +39,12 @@ Route::get('/products/{product:slug}', [ProductController::class, 'show']);
 
 // address 
 Route::get('/addresses/{user}', [AddressController::class, 'index']);
-Route::post('/addresses/{user}/create', [AddressController::class, 'create']);
+Route::post('/save-address/{user}', [AddressController::class, 'create']);
+Route::post('/edit-address/{address}', [AddressController::class, 'edit']);
+Route::delete('/delete-address/{address}', [AddressController::class, 'destroy']);
 
 Route::post('/place-order', [OrderController::class, 'placeOrder']);
+
 Route::get('/get-order-summery/{user}', [OrderController::class, 'getOrderSummery']);
 Route::get('/get-order-details/{order}', [OrderController::class, 'getOrderDetails']);
 Route::get('/orders/{order:order_code}', [OrderController::class, 'getOrder']);

@@ -29,15 +29,17 @@ class CreateOrdersTable extends Migration
             $table->string('delivery_address');
           
             $table->float('subtotal');
-            $table->float('tax')->nullable();
             $table->float('delivery')->nullable();
             $table->unsignedInteger('total_quantity');
             $table->float('total'); 
 
             $table->string('payment_method')->default('cod');
+            $table->string('bkash_transaction_id')->nullable();
             $table->boolean('payment_status')->default(false);
 
-            $table->enum('status', ['pending', 'cancelled', 'received', 'delivered'])->default('pending');
+            $table->json('order_meta_data');
+
+            $table->enum('status', ['received', 'processing', 'delivered', 'cancelled'])->default('received');
 
             $table->timestamps();
         });

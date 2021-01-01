@@ -15,7 +15,7 @@ class ProductController extends Controller
     {
         $categories = $category->descendants()->pluck('id');
         $categories[] = $category->getKey();
-        $products = Product::whereIn('category_id', $categories)->latest()->paginate(30);
+        $products = Product::whereIn('category_id', $categories)->latest()->paginate(28);
 
         return new ProductCollection($products);
     }

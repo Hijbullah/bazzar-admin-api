@@ -25,10 +25,16 @@ class CreateProductsTable extends Migration
             $table->longText('description')->nullable();
 
             $table->unsignedInteger('quantity')->nullable();
-            $table->float('sale_price', 8, 2)->nullable();
+            $table->float('price', 8, 2)->nullable();
             $table->float('discount', 8, 1)->nullable();
-            $table->float('price_show', 8, 2)->nullable();
+            $table->float('price_after_discount', 8, 2)->nullable();
             $table->json('images')->nullable();
+
+            $table->string('meta_title')->nullable();
+            $table->json('meta_keywords')->nullable();
+            $table->text('meta_description')->nullable();
+
+            $table->enum('stock_status', ['in_stock', 'low', 'out_of_stock']);
             $table->boolean('status')->default(0);
             $table->timestamps();
         });

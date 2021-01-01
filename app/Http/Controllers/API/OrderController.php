@@ -25,12 +25,14 @@ class OrderController extends Controller
         return response()->json($order);
     }
 
-    public function placeOrder(StoreOrderRequest $request)
+    public function placeOrder(Request $request)
     {
+        return $request;
+
         $order = new Order;
         $order->order_code = Str::random(11);
         $order->user_id = $request->user;
-        // $order->delivery_email = $request->address->email;
+        
         $order->delivery_name = $request->address['name'];
         $order->delivery_phone = $request->address['phone'];
         $order->delivery_city = $request->address['city'];

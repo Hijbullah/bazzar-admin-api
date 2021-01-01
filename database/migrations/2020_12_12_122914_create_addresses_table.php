@@ -21,6 +21,7 @@ class CreateAddressesTable extends Migration
                     
             $table->string('name');
             $table->string('phone');
+            $table->string('email')->nullable();
             $table->string('city');
             $table->mediumText('address');
             $table->timestamps();

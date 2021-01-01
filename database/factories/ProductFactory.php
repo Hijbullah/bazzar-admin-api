@@ -24,6 +24,10 @@ class ProductFactory extends Factory
     {
         $name = $this->faker->sentence();
         $price = $this->faker->numberBetween(100, 2000);
+        $discount = round($price * ($this->faker->numberBetween(10, 20) / 100));
+        $price_after_discount = $price - $discount;
+
+
 
         return [
             'category_id' => $this->faker->numberBetween(7, 28),
@@ -32,8 +36,11 @@ class ProductFactory extends Factory
             'short_description' => $this->faker->text(250),
             'description' => $this->faker->text(500),
             'quantity' => $this->faker->numberBetween(10, 100),
-            'sale_price' => $price,
-            'price_show' => $price,
+            'price' => $price,
+            'discount' => $discount,
+            'price_after_discount' => $price_after_discount,
+            'stock_status' => 'in_stock',
+            'status' => true,
             'images' => [
                 'products/2ncGtP2NptOnQrueGj17RicD7LbZFlT6q58lUnt9.jpg',
                 'products/aGNNO4zkLtmoZTlHLrekfEuKDeSEPlZtMYA0Y4pu.jpg',
