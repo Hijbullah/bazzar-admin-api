@@ -43,7 +43,9 @@ Route::post('/save-address/{user}', [AddressController::class, 'create']);
 Route::post('/edit-address/{address}', [AddressController::class, 'edit']);
 Route::delete('/delete-address/{address}', [AddressController::class, 'destroy']);
 
-Route::post('/place-order', [OrderController::class, 'placeOrder']);
+Route::post('/place-order', [OrderController::class, 'storeOrder']);
+Route::get('/get-order/{order}', [OrderController::class, 'getOrder']);
+Route::get('/get-orders/{user}', [OrderController::class, 'getAllOrder']);
 
 Route::get('/get-order-summery/{user}', [OrderController::class, 'getOrderSummery']);
 Route::get('/get-order-details/{order}', [OrderController::class, 'getOrderDetails']);

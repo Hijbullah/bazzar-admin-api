@@ -7,28 +7,31 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreOrderRequest;
+use App\Http\Resources\Order as OrderResource;
 
 class OrderController extends Controller
 {
-    public function getOrderSummery($user) {
-        $orders = Order::where('user_id', $user)->latest()->get();
-        return $orders;
-    }
-
-    public function getOrderDetails($orderCode)
+    public function getOrder($orderCode)
     {
-        return Order::where('order_code', $orderCode)->with('products')->first();
+        $order = Order::whereOrderCode($orderCode)
+            ->select('id', 'order_code', 'total', 'payment_method', 'created_at')
+            ->firstOrFail();
+
+        return response()->json([
+            'orderCode' => $order->order_code,
+            'total' => $order->total,
+            'paymentMethod' => $order->payment_method,
+            'orderDate' => $order->created_at->toDayDateTimeString()
+        ]);
+    }   
+
+    public function getAllOrder($user)
+    {
+        return OrderResource::collection(Order::whereUserId($user)->latest()->get());
     }
    
-    public function getOrder(Order $order)
+    public function storeOrder(Request $request)
     {
-        return response()->json($order);
-    }
-
-    public function placeOrder(Request $request)
-    {
-        return $request;
-
         $order = new Order;
         $order->order_code = Str::random(11);
         $order->user_id = $request->user;
@@ -42,11 +45,18 @@ class OrderController extends Controller
         $order->delivery = $request->order['delivery'];
         $order->total_quantity = $request->order['totalQuantity'];
         $order->total = $request->order['total'];
+
+        $order->payment_method = $request->paymentMethod;
+        $order->order_meta_data = $request->order;
+
         $order->save();
 
         $this->storeOrderProduct($order, $request->order['products']);
 
-        return response()->json($order->order_code);
+        return response()->json([
+            'message' => 'Order placed successfully',
+            'order_code' => $order->order_code
+        ]);
     }
 
     public function storeOrderProduct($order, $products)
@@ -68,7 +78,5 @@ class OrderController extends Controller
         $order->save();
 
         return response()->json(['message' => 'Payment successfull']);
-    }
-
-    
+    } 
 }
