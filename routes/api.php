@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\ProductController;
@@ -52,6 +53,8 @@ Route::get('/get-order-details/{order}', [OrderController::class, 'getOrderDetai
 Route::get('/orders/{order:order_code}', [OrderController::class, 'getOrder']);
 Route::post('/make-payment/{order:order_code}', [OrderController::class, 'makePayment']);
 
+Route::put('/update-profile/{user}', [UserController::class, 'updateProfile']);
+Route::put('/change-password/{user}', [UserController::class, 'changePassword']);
 
 Route::prefix('auth')->middleware('api')->group(function() {
     Route::post('login', [AuthController::class,'login']);
@@ -59,7 +62,6 @@ Route::prefix('auth')->middleware('api')->group(function() {
     Route::post('logout', [AuthController::class,'logout']);
     Route::post('refresh', [AuthController::class,'refresh']);
     Route::get('user', [AuthController::class,'user']);
-
     Route::post('forget-password', [AuthController::class, 'forgetPassword']);
     Route::post('reset-password', [AuthController::class, 'resetPassword']);
 });
