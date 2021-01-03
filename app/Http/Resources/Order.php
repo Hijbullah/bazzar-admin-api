@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Order extends JsonResource
@@ -40,6 +41,7 @@ class Order extends JsonResource
                                 return [
                                     'id' => $product['id'],
                                     'name' => $product['name'],
+                                    'image' => $product['image'],
                                     'price' => $product['price'],
                                     'quantity' => $product['quantity'],
                                     'total' => $product['price'] * $product['quantity'] 
