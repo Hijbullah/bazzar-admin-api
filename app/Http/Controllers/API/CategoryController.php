@@ -6,13 +6,17 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Category as CategoryResource;
 
 class CategoryController extends Controller
 {
-    public function index()
+    public function getCategories()
     {
-        $categories = Category::get()->toTree();
-        return response()->json($categories);
+        $categories = Category::with('ancestors')->get()->toTree();
+        // return $categories;
+        // $categories =Category::with('descendants')->get();
+        return CategoryResource::collection($categories);
+        // return response()->json($categories);
     }
 
     public function getProducts(Category $category)

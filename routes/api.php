@@ -28,7 +28,7 @@ use App\Http\Controllers\API\CategoryController;
 // });
 
 // Route::get('/user', fn(Request $request) => $request->user());
-Route::get('/categories', [CategoryController::class, 'index']);
+Route::get('/get-categories', [CategoryController::class, 'getCategories']);
 Route::get('/categories/{category:slug}', [CategoryController::class, 'getProducts']);
 // Route::get('/products/{product:slug}', [CategoryController::class, 'getproduct']);
 Route::post('/check-quantity/{productId}', [CategoryController::class, 'checkQuantity']);
