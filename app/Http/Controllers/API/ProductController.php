@@ -15,13 +15,13 @@ class ProductController extends Controller
     {
         $categories = $category->descendants()->pluck('id');
         $categories[] = $category->getKey();
-        $products = Product::whereIn('category_id', $categories)->latest()->paginate(28);
+        $products = Product::whereIn('category_id', $categories)->withAvg('reviews', 'rating')->latest()->paginate(24);
 
         return new ProductCollection($products);
     }
 
-    public function show(Product $product)
+    public function show($slug) // slug
     {
-        return new ProductResource($product);
+        return new ProductResource(Product::whereSlug($slug)->with('reviews')->withAvg('reviews', 'rating')->firstOrFail());
     }
 }

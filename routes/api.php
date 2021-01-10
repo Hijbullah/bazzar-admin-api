@@ -35,7 +35,7 @@ Route::post('/check-quantity/{productId}', [CategoryController::class, 'checkQua
 
 //products
 Route::get('/products/categories/{category:slug}', [ProductController::class, 'index']);
-Route::get('/products/{product:slug}', [ProductController::class, 'show']);
+Route::get('/products/{product}', [ProductController::class, 'show']);
 
 
 // address 

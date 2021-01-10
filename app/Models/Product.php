@@ -11,6 +11,8 @@ class Product extends Model
 
     protected $guarded = [];
 
+    // protected $appends = ['average_rating'];
+
     protected $casts = [
         'images' => 'array',
     ];
@@ -18,5 +20,10 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo('App\Models\Category');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class)->latest();
     }
 }

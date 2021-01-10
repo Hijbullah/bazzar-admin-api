@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Review;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -29,9 +30,11 @@ class Product extends JsonResource
            
             'short_description' => $this->short_description,
             'description' => $this->description,
+            'averageRating' => round($this->reviews_avg_rating, 1),
             'images' => collect($this->images)->transform(function($image) {
                 return Storage::url($image);
             }),
+            'reviews' => Review::collection($this->whenLoaded('reviews')),
         ];
     }
 }

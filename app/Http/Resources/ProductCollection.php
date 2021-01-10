@@ -28,6 +28,7 @@ class ProductCollection extends ResourceCollection
                         'discount' => $product->discount,
                         'discountInPercentage' => round(($product->discount / $product->price) * 100)
                     ],
+                    'ratings' => round($product->reviews_avg_rating, 1),
                     'image' => Storage::url($product->images[mt_rand(0, count($product->images) - 1)])
                 ];
             }),
