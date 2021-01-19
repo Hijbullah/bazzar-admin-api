@@ -17,7 +17,18 @@
                 display: none;
             }
         </style>
+        
+        <link href="{{ asset('vendors/trix/trix.css') }}" rel="stylesheet">
+        <style>
+            .trix-content ul {
+                list-style-type: disc;
+            }
+            .trix-content ol {
+                list-style-type: decimal;
+            }
+        </style>
         @stack('page-css')
+
         @livewireStyles
     </head>
     <body class="font-sans antialiased">
@@ -37,6 +48,8 @@
         </div>
         @livewireScripts
         @stack('page-js')
+    
+        <script src="{{ asset('vendors/trix/trix.js') }}"></script>
         <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

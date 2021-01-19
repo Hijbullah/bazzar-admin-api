@@ -34,7 +34,6 @@ class CreateOrdersTable extends Migration
             $table->float('total'); 
 
             $table->string('payment_method')->default('cod');
-            $table->string('bkash_transaction_id')->nullable();
             $table->boolean('payment_status')->default(false);
 
             $table->json('order_meta_data');

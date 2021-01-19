@@ -64,7 +64,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return Category::whereId($category->id)->with('products')->first();
     }
 
     /**

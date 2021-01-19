@@ -21,7 +21,6 @@ class CreateProductsTable extends Migration
 
             $table->string('name');
             $table->string('slug', 100)->unique();
-            $table->mediumText('short_description');
             $table->longText('description')->nullable();
 
             $table->unsignedInteger('quantity')->nullable();
@@ -30,12 +29,16 @@ class CreateProductsTable extends Migration
             $table->float('price_after_discount', 8, 2)->nullable();
             $table->json('images')->nullable();
 
+            $table->json('variations')->nullable();
+
             $table->string('meta_title')->nullable();
             $table->json('meta_keywords')->nullable();
             $table->text('meta_description')->nullable();
 
             $table->enum('stock_status', ['in_stock', 'low', 'out_of_stock']);
-            $table->boolean('status')->default(0);
+            $table->boolean('is_popular')->default(false);
+            $table->boolean('status')->default(false);
+
             $table->timestamps();
         });
 

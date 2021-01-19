@@ -2,39 +2,33 @@
 
 namespace App\Http\Livewire\Products;
 
-use App\Models\Attribute;
 use App\Models\Product;
 use Livewire\Component;
 use App\Models\Category;
-use Illuminate\Support\Str;
-use Livewire\WithFileUploads;
 
-class Create extends Component
+class CreateProduct extends Component
 {
-    use WithFileUploads;
+    public $hasProductVariation = false;
     
-    public $categories;
-    public $attributes;
-
-
-    public $category;
+    public $test;
+    public $category_id;
     public $name;
-    public $productUrl;
     public $price;
     public $discount;
     public $quantity;
     public $shortDescription;
     public $description;
     public $status = true;
+    public $productAttributes = [];
 
     public $images =  [];
-    public $image;
+
+    protected $listeners = ['imageUpdated', 'productAttributesUpdated'];
+
 
     protected $rules = [
-        'category' => ['required', 'numeric'],
+        'category_id' => ['required', 'numeric'],
         'name' => ['required', 'string', 'max:255'],
-        'productUrl' => ['required', 'string', 'max:100'],
-        'shortDescription' => ['required', 'string', 'max:2000'],
         'description' => ['nullable', 'string'],
         'price' => ['nullable', 'numeric', 'min:1'],
         'discount' => ['nullable', 'numeric'],
@@ -43,33 +37,25 @@ class Create extends Component
     ];
 
     protected $messages = [
-        'images.required' => 'Atleast one images is required.',
+        'category_id.required' => 'Category is required.',
+        'images.required' => 'Atleast one image is required.',
     ];
+
+    public function imageUpdated($images)
+    {
+        $this->images = $images;
+    }
     
-    public function updatedName($value)
+    public function productAttributesUpdated($productAttributes)
     {
-        $this->productUrl = preg_replace('/\s+/u', '-', trim(Str::of($value)->limit(100, ' ')->lower()));
+        $this->productAttributes = $productAttributes;
     }
-
-    public function updatedImage()
-    {
-        $this->validate([
-            'image' => 'image|mimes:jpg,jpeg|max:1024', // 1MB Max
-        ]);
-
-        array_push($this->images, $this->image);
-        $this->image = null;
-    }
-
-    public function removeImage($index) 
-    {
-        array_splice($this->images, $index, 1);
-    }
-            
-    
+  
     public function saveProduct()
     {
         $data = $this->validate();
+
+        dd($data);
 
         $imagesUrl = collect($this->images)->map->store('products');
 
@@ -92,11 +78,21 @@ class Create extends Component
         return redirect()->route('products.index');
     }
 
+    public function getCategoriesProperty()
+    {
+        return Category::withDepth()->get()->toTree();
+    }
+
+    // public function mount()
+    // {
+    //     $categories = Category::withDepth()->get();
+    //     $this->allCategories = $categories;
+    // }
 
     public function render()
     {
-        return view('livewire.products.create', [
-            
-        ]);
+        return view('livewire.products.create-product')
+            ->extends('layouts.app')
+            ->section('page-content');
     }
 }

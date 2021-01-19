@@ -11,4 +11,9 @@ class Category extends Model
     use HasFactory, NodeTrait;
 
     protected $guarded = [];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

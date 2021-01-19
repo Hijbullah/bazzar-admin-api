@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('category:id,name')->latest()->get();
+        $products = Product::with('category:id,name')->latest()->paginate(10);
         return view('pages.products.index', compact('products'));
     }
 
@@ -50,7 +50,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return Product::whereId($product->id)->with('category:id,name')->first();
     }
 
     /**
