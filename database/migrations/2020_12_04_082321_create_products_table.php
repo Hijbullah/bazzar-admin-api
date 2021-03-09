@@ -19,15 +19,23 @@ class CreateProductsTable extends Migration
                     ->constrained()
                     ->onDelete('cascade');
 
+            $table->enum('product_type', ['simple', 'variable']);
+
             $table->string('name');
             $table->string('slug', 100)->unique();
             $table->longText('description')->nullable();
 
             $table->unsignedInteger('quantity')->nullable();
             $table->float('price', 8, 2)->nullable();
+            $table->json('images')->nullable();
+
+            $table->boolean('is_popular')->default(false);
+            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_flash_sale')->default(false);
+            $table->boolean('is_spa')->default(false);
+
             $table->float('discount', 8, 1)->nullable();
             $table->float('price_after_discount', 8, 2)->nullable();
-            $table->json('images')->nullable();
 
             $table->json('variations')->nullable();
 
@@ -36,7 +44,6 @@ class CreateProductsTable extends Migration
             $table->text('meta_description')->nullable();
 
             $table->enum('stock_status', ['in_stock', 'low', 'out_of_stock']);
-            $table->boolean('is_popular')->default(false);
             $table->boolean('status')->default(false);
 
             $table->timestamps();

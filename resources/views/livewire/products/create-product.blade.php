@@ -108,13 +108,13 @@
                     </div>
                 </div>
             </div>
-            <div class="mb-5">
+            {{-- <div class="mb-5">
                 <p>Product Variations</p>
                 <div>
                     <livewire:products.product-attribute />
                 </div>
                 {{ collect($productAttributes)->toJson() }}
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>
